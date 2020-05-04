@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Passenger.Core.Repositories;
+using Passenger.Infrastructure.Mappers;
 using Passenger.Infrastructure.Repositories;
 using Passenger.Infrastructure.Services;
 
@@ -30,6 +31,7 @@ namespace Passenger
         {
             services.AddScoped<IUserRepository, InMemoryUserRepository>();
             services.AddScoped<IUserService, UserServices>();
+            services.AddSingleton(AutoMapperConfig.Initialize());
             
             services.AddControllers().AddJsonOptions(options =>
             {

@@ -1,0 +1,19 @@
+﻿@url = https://localhost:44371
+
+@email = user12@mail.com
+
+###
+GET {{url}}/users/{{email}}
+
+###
+POST {{url}}/users
+content-type: application/json
+
+{
+  "email": "user12@mail.com",
+  "password": "kdajs776@",
+  "userName": "janek23",
+  "fullName": "jan kowalski"
+}
+
+

@@ -24,7 +24,7 @@ namespace Passenger.Core.Domain
 
         public DateTime UpdatedAt { get; protected set; }
 
-        private static readonly Regex NameRegex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+        private static readonly Regex EmailRegex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
 
         protected User()
         {
@@ -48,7 +48,7 @@ namespace Passenger.Core.Domain
                 throw new Exception("Email can not be empty.");
             }
 
-            if (!NameRegex.IsMatch(email))
+            if (!EmailRegex.IsMatch(email))
             {
                 throw new Exception("The format of the email address is not valid.");
                
@@ -81,13 +81,12 @@ namespace Passenger.Core.Domain
                 throw new Exception("You didn't enter a name.");
             }
             
-            if (!NameRegex.IsMatch(username))
-            {
-                 throw new Exception("Username is invalid.");
-            }
+            //if (!NameRegex.IsMatch(username))
+            //{
+            //     throw new Exception("Username is invalid.");
+            //}
 
-                UserName = username.ToLowerInvariant();
-                UpdatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
 
         }
 

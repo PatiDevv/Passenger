@@ -1,29 +1,28 @@
 ﻿using Passenger.Infrastructure.DTO;
 using Passenger.Core.Repositories;
 using System;
+using System.Threading.Tasks;
+using AutoMapper;
+using Passenger.Core.Domain;
 
 namespace Passenger.Infrastructure.Services
 {
     public class DriverService : IDriverService
     {
         private readonly IDriverRepository _driverRepository;
+        private readonly IMapper _mapper;
 
-        public DriverService(IDriverRepository driverRepository)
+        public DriverService(IDriverRepository driverRepository, IMapper mapper)
         {
             _driverRepository = driverRepository;
+            _mapper = mapper;
         }
 
-        public DriverDto Get(Guid userId)
+        public async Task <DriverDto> GetAsync(Guid userId)
         {
-            var driver = _driverRepository.Get(userId);
+            var driver = await _driverRepository.GetAsync(userId);
 
-            return new DriverDto
-            {
-                DailyRoutes = driver.DailyRoutes,
-                Id = driver.Id,
-                Routes = driver.Routes,
-                Vehicle = driver.Vehicle
-            };
+            return _mapper.Map<Driver, DriverDto>(driver);
         }
     }
 }

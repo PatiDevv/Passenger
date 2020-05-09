@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Services
 {
-    public class UserServices : IUserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public UserServices(IUserRepository userRepository, IMapper mapper)
+        public UserService(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _mapper = mapper;

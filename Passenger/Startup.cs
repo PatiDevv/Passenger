@@ -30,7 +30,7 @@ namespace Passenger
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IUserRepository, InMemoryUserRepository>();
-            services.AddScoped<IUserService, UserServices>();
+            services.AddScoped<IUserService, UserService>();
             services.AddSingleton(AutoMapperConfig.Initialize());
             
             services.AddControllers().AddJsonOptions(options =>

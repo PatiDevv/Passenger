@@ -1,16 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Passenger.Core.Repositories;
+using Passenger.Infrastructure.IoC.Modules;
 using Passenger.Infrastructure.Mappers;
 using Passenger.Infrastructure.Repositories;
 using Passenger.Infrastructure.Services;
@@ -19,15 +16,17 @@ namespace Passenger
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        public IContainer ApplicationContiner { get; private set; }
+
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IUserRepository, InMemoryUserRepository>();
             services.AddScoped<IUserService, UserService>();
@@ -38,11 +37,19 @@ namespace Passenger
                 options.JsonSerializerOptions.WriteIndented = true;
             });
 
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+            builder.RegisterModule<CommandModule>();
+            ApplicationContiner = builder.Build();
+
+            return new AutofacServiceProvider(ApplicationContiner);
+
         }
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime appLifetime)
         {
             if (env.IsDevelopment())
             {
@@ -59,6 +66,8 @@ namespace Passenger
             {
                 endpoints.MapControllers();
             });
+
+            appLifetime.ApplicationStopped.Register(() => ApplicationContiner.Dispose());
         }
     }
 }

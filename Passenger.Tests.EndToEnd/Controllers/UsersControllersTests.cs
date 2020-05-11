@@ -12,20 +12,8 @@ using Xunit;
 
 namespace Passenger.Tests.EndToEnd.Controllers
 {
-    public class UsersControllersTests
+    public class UsersControllersTests : ControllerTestsBase
     {
-        private readonly TestServer _server;
-
-        private readonly HttpClient _client;
-
-        //arrange
-        public UsersControllersTests()
-        {
-            _server = new TestServer(new WebHostBuilder()
-                        .UseStartup<Startup>());
-            _client = _server.CreateClient();
-            
-        }
 
         [Fact]
         public async Task given_valid_email_user_should_exist()
@@ -43,7 +31,7 @@ namespace Passenger.Tests.EndToEnd.Controllers
         {
             //Act
             var email = "user1000@mail.com";
-            var response = await _client.GetAsync($"users/{email}");
+            var response = await Client.GetAsync($"users/{email}");
             
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.NotFound);
         }
@@ -52,9 +40,7 @@ namespace Passenger.Tests.EndToEnd.Controllers
         public async Task given_unique_email_user_should_be_created()
         {
             //Act
-
-
-            var request = new CreateUser
+            var commend = new CreateUser
             {
                 Email = "blabla@email.com",
                 Password = "secretttt",
@@ -62,35 +48,25 @@ namespace Passenger.Tests.EndToEnd.Controllers
                 FullName = "kowalski"
             };
 
-            var payload = GetPayload(request);
-            var response = await _client.PostAsync("users", payload);
+            var payload = GetPayload(commend);
+            var response = await Client.PostAsync("users", payload);
 
             response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.Created);
             var actualLocation = response.Headers.Location.ToString();
-            var expectedLocation = string.Format($"users/{request.Email}");
+            var expectedLocation = string.Format($"users/{commend.Email}");
 
             actualLocation.ShouldBeEquivalentTo(expectedLocation);
 
-            var user = await GetUserAsync(request.Email);
-            user.Email.ShouldBeEquivalentTo(request.Email);
+            var user = await GetUserAsync(commend.Email);
+            user.Email.ShouldBeEquivalentTo(commend.Email);
         }
 
         private async Task<UserDto> GetUserAsync(string email)
         {
-            var response = await _client.GetAsync($"users/{email}");
+            var response = await Client.GetAsync($"users/{email}");
             var responseString = await response.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<UserDto>(responseString);
         }
-
-      
-        private static StringContent GetPayload (object data)
-        {
-            var json = JsonConvert.SerializeObject(data);
-
-            return new StringContent(json, Encoding.UTF8, "application/json");
-        }
-
-        
     }
 }

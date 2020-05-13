@@ -1,4 +1,3 @@
-using System;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -17,7 +16,7 @@ namespace Passenger
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public IContainer ApplicationContiner { get; private set; }
+        public ILifetimeScope AutofacContainer { get; private set; }
 
 
         public Startup(IConfiguration configuration)
@@ -26,24 +25,22 @@ namespace Passenger
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IUserRepository, InMemoryUserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddSingleton(AutoMapperConfig.Initialize());
-            
+
             services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.WriteIndented = true;
             });
+        }
 
-            var builder = new ContainerBuilder();
-            builder.Populate(services);
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
             builder.RegisterModule<CommandModule>();
-            ApplicationContiner = builder.Build();
-
-            return new AutofacServiceProvider(ApplicationContiner);
-
+            builder.RegisterModule(new SettingsModule(Configuration));
         }
 
 
@@ -67,7 +64,7 @@ namespace Passenger
                 endpoints.MapControllers();
             });
 
-            appLifetime.ApplicationStopped.Register(() => ApplicationContiner.Dispose());
+            AutofacContainer = app.ApplicationServices.GetAutofacRoot();
         }
     }
 }

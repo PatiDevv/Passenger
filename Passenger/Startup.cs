@@ -40,7 +40,7 @@ namespace Passenger
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule<CommandModule>();
-            builder.RegisterModule(new SettingsModule(Configuration));
+            //builder.RegisterModule(new SettingsModule(Configuration));
         }
 
 

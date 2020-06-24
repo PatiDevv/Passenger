@@ -24,6 +24,5 @@ namespace Passenger.Infrastructure.IoC.Modules
                 .As<ICommandDispatcher>()
                 .InstancePerLifetimeScope();
         }
-
     }
 }

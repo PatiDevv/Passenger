@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+using Autofac.Extensions.DependencyInjection;
 using System.Net.Http;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace Passenger.Tests.EndToEnd.Controllers
 {
@@ -18,6 +18,8 @@ namespace Passenger.Tests.EndToEnd.Controllers
             protected ControllerTestsBase()
             {
                 Server = new TestServer(new WebHostBuilder()
+                            .ConfigureAppConfiguration(a => a.AddJsonFile("appsettings.Development.json"))
+                            .ConfigureServices(x => x.AddAutofac())
                             .UseStartup<Startup>());
                 Client = Server.CreateClient();
 

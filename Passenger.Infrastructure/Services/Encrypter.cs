@@ -2,7 +2,6 @@
 using System;
 using System.Security.Cryptography;
 
-
 namespace Passenger.Infrastructure.Services
 {
     public class Encrypter : IEncrypter

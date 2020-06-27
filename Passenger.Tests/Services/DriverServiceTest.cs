@@ -70,7 +70,6 @@ namespace Passenger.Tests.Services
 
             var _driverService = new DriverService(driverRepository.Object, mapperMock.Object, userRepository.Object);
 
-
             // Act 
             var creatingDriverTask = _driverService.CreateAsync(registered_user.Id, new DriverVehicle { Brand = "asasd", Name = "asdasd", Seats = 4 });
             await creatingDriverTask;

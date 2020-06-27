@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Passenger.Infrastructure.Services;
-using Passenger.Infrastructure.DTO;
 using Passenger.Infrastructure.Commands.Users;
 using Passenger.Infrastructure.Commands;
 using Passenger.Infrastructure.Settings;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Passenger.Api.Controllers
 {
@@ -20,6 +20,7 @@ namespace Passenger.Api.Controllers
             _userService = userServices;
         }
 
+        [Authorize(Policy = "admin")]
         [HttpGet("{email}")]
         public async Task<IActionResult> Get(string email)
         {

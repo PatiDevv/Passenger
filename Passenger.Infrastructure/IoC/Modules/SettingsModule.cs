@@ -17,7 +17,9 @@ namespace Passenger.Infrastructure.IoC.Modules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterInstance(_configuration.GetSettings<GeneralSettings>())
-                .SingleInstance(); 
+                .SingleInstance();
+            builder.RegisterInstance(_configuration.GetSettings<JwtSettings>())
+                .SingleInstance();
         }
     }
 }

@@ -1,16 +1,16 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Passenger.Core.Repositories;
+using Microsoft.IdentityModel.Tokens;
+using Passenger.Infrastructure.Extensions;
 using Passenger.Infrastructure.IoC;
-using Passenger.Infrastructure.IoC.Modules;
-using Passenger.Infrastructure.Mappers;
-using Passenger.Infrastructure.Repositories;
-using Passenger.Infrastructure.Services;
+using Passenger.Infrastructure.Settings;
+using System.Text;
 
 namespace Passenger
 {
@@ -31,6 +31,32 @@ namespace Passenger
             services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.WriteIndented = true;
+            });
+
+            // Pobranie appsetingsow (appsetings.json)
+            var jwtSettings = Configuration.GetSettings<JwtSettings>();
+            var key = Encoding.ASCII.GetBytes(jwtSettings.Key);
+
+            services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
+
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidIssuer = jwtSettings.Issuer
+                };
             });
         }
 
@@ -53,6 +79,7 @@ namespace Passenger
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

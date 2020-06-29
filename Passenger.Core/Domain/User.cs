@@ -20,6 +20,8 @@ namespace Passenger.Core.Domain
 
         public string FullName { get; protected set; }
 
+        public string Role { get; protected set; }
+
         public DateTime CreateAt { get; protected set; }
 
         public DateTime UpdatedAt { get; protected set; }
@@ -30,7 +32,7 @@ namespace Passenger.Core.Domain
         {
         }
 
-        public User (string email, string username, string password, string salt, string fullname)
+        public User (string email, string username, string password, string salt, string fullname, string role)
         {
             Id = Guid.NewGuid();
             Salt = salt;
@@ -39,6 +41,7 @@ namespace Passenger.Core.Domain
             SetEmail(email);
             SetUserName(username);
             SetFullName(fullname);
+            Role = role;
         }
 
         private void SetEmail(string email)

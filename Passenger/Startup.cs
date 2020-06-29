@@ -38,6 +38,7 @@ namespace Passenger
             var key = Encoding.ASCII.GetBytes(jwtSettings.Key);
 
             services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
+            services.AddMemoryCache();
 
 
             services.AddAuthentication(x =>

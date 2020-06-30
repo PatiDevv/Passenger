@@ -3,6 +3,7 @@ using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
 using Passenger.Infrastructure.DTO;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Services
@@ -25,6 +26,14 @@ namespace Passenger.Infrastructure.Services
             var user = await _userRepository.GetAsync(email);
 
             return _mapper.Map<User, UserDto>(user);
+        }
+
+
+        public async Task<IEnumerable<UserDto>> BrowseAsync()
+        {
+            var users = await _userRepository.GetAllAsync();
+
+            return _mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(users);
         }
 
         public async Task LoginAsync(string email, string password)

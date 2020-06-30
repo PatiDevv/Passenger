@@ -32,6 +32,12 @@ namespace Passenger.Api.Controllers
             return Ok(user);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var users = await _userService.BrowseAsync();
+            return Json(users);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateUser command)

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Passenger.Core.Domain;
 using Passenger.Infrastructure.Commands.Drivers;
+using System.Collections.Generic;
 
 namespace Passenger.Infrastructure.Services
 {
@@ -28,24 +29,41 @@ namespace Passenger.Infrastructure.Services
             return _mapper.Map<Driver, DriverDto>(driver);
         }
 
-        public async Task CreateAsync(Guid userId, DriverVehicle vehicle)
+        public async Task<IEnumerable<DriverDto>> BrowseAsync()
+        {
+            var drivers = await _driverRepository.GetAllAsync();
+
+            return _mapper.Map<IEnumerable<Driver>, IEnumerable<DriverDto>>(drivers);
+        }
+
+        public async Task CreateAsync(Guid userId)
         {
             var user = await _userRepository.GetAsync(userId);
             if (user == null)
             {
-                throw new Exception($"User with id: '{userId}' does not exists.");
+                throw new Exception($"User with id: '{userId}' was not found.");
             }
 
             var driver = await _driverRepository.GetAsync(userId);
             if (driver != null)
             {
-                throw new Exception($"User with Id: '{userId}' is already assigned to the driver: {driver}");
+                throw new Exception($"Driver with Id: '{userId}' already exists.");
             }
 
-            var newdrivervehicle = Vehicle.Create(vehicle.Brand, vehicle.Name, vehicle.Seats);
-            driver = new Driver(userId, newdrivervehicle, null, null);
-            await _userRepository.AddAsync(user);
+            driver = new Driver(user);
+           
             await _driverRepository.AddAsync(driver);
+        }
+
+        public async Task SetVehicleAsync(Guid userId, string brand, string name, int seats)
+        {
+            var driver = await _driverRepository.GetAsync(userId);
+            if (driver == null)
+            {
+                throw new Exception($"Driver with user Id: '{userId}' was not found.");
+            }
+            driver.SetVehicle(brand, name, seats);
+            await _driverRepository.UpdateAsync(driver);
         }
     }
 }

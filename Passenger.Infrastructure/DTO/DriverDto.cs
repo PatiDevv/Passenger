@@ -7,9 +7,8 @@ namespace Passenger.Infrastructure.DTO
 {
     public class DriverDto
     {
-        public Guid Id { get; set; }
-        public Vehicle Vehicle { get; set; }
-        public IEnumerable<Route> Routes { get; set; }
-        public IEnumerable<DailyRoute> DailyRoutes { get; set; }
+        public Guid UserId { get; protected set; }
+        public string Name { get; protected set; }
+        public DateTime UpdateAt { get; protected set; }
     }
 }

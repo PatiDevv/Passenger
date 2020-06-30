@@ -19,7 +19,6 @@ namespace Passenger
 {
     public class Startup
     {
-        private static readonly object SyncObject = new object();
         public IConfiguration Configuration { get; }
         public ILifetimeScope AutofacContainer { get; private set; }
 
@@ -100,11 +99,8 @@ namespace Passenger
 
             if(generalSettings.SeedData)
             {
-                // end to end tests workaround
-             
-                    var dataInitializer = app.ApplicationServices.GetService<IDataInitializer>();
-                    dataInitializer.SeedAsync();
-                
+                var dataInitializer = app.ApplicationServices.GetService<IDataInitializer>();
+                dataInitializer.SeedAsync();
             }
         }
     }

@@ -23,10 +23,9 @@ namespace Passenger.Tests.Services
             var _driverService = new DriverService(driverRepository.Object, mapperMock.Object, userRepository.Object);
 
             var userId = Guid.NewGuid();
-            var driverVehicle = new DriverVehicle();
 
             // Act 
-            var creatingDriverTask = _driverService.CreateAsync(userId, driverVehicle);
+            var creatingDriverTask = _driverService.CreateAsync(userId);
 
             // Assert
             await Assert.ThrowsAsync<Exception>(() => creatingDriverTask);
@@ -51,7 +50,7 @@ namespace Passenger.Tests.Services
             var _driverService = new DriverService(driverRepository.Object, mapperMock.Object, userRepository.Object);
 
             // Act
-            var creatingDriverTask = _driverService.CreateAsync(registered_user.Id, null);
+            var creatingDriverTask = _driverService.CreateAsync(registered_user.Id);
 
             // Assert
             await Assert.ThrowsAsync<Exception>(() => creatingDriverTask);
@@ -71,7 +70,7 @@ namespace Passenger.Tests.Services
             var _driverService = new DriverService(driverRepository.Object, mapperMock.Object, userRepository.Object);
 
             // Act 
-            var creatingDriverTask = _driverService.CreateAsync(registered_user.Id, new DriverVehicle { Brand = "asasd", Name = "asdasd", Seats = 4 });
+            var creatingDriverTask = _driverService.CreateAsync(registered_user.Id);
             await creatingDriverTask;
 
             // Assert

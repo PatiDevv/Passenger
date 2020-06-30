@@ -23,7 +23,7 @@ namespace Passenger.Tests.Services
             var mapperMock = new Mock<IMapper>();
             
             var userService = new UserService(userRepositoryMock.Object, encrypterMock, mapperMock.Object);
-            await userService.RegisterAsync("user1@email.com", "user", "secretttt", "kowalski", "admin");
+            await userService.RegisterAsync(Guid.NewGuid(), "user1@email.com", "user", "secretttt", "kowalski", "admin");
 
             userRepositoryMock.Verify(x => x.AddAsync(It.IsAny<User>()), Times.Once);
         }
@@ -33,7 +33,7 @@ namespace Passenger.Tests.Services
         {
             //Act
 
-            var registered_user = new User ("arkadiuszchr@gmail.com", "arkadiusz", "secretttt", "secretttt", "arkadiusz chr", "admin");
+            var registered_user = new User (Guid.NewGuid(), "arkadiuszchr@gmail.com", "arkadiusz", "secretttt", "secretttt", "arkadiusz chr", "admin");
 
             var userRepositoryMock = new Mock<IUserRepository>();
             userRepositoryMock.Setup(x => x.GetAsync("arkadiuszchr@gmail.com")).Returns(Task.FromResult(registered_user));
@@ -43,7 +43,7 @@ namespace Passenger.Tests.Services
             var userService = new UserService(userRepositoryMock.Object, encrypterMock, mapperMock.Object);
 
             //Assert
-            await Assert.ThrowsAsync<Exception>(() => userService.RegisterAsync("arkadiuszchr@gmail.com", "arkadiusz", "secretttt", "arkadiusz chr", "admin"));
+            await Assert.ThrowsAsync<Exception>(() => userService.RegisterAsync(Guid.NewGuid(), "arkadiuszchr@gmail.com", "arkadiusz", "secretttt", "arkadiusz chr", "admin"));
 
         }
 

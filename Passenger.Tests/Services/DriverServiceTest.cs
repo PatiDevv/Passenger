@@ -41,7 +41,7 @@ namespace Passenger.Tests.Services
             var userRepository = new Mock<IUserRepository>();
             var mapperMock = new Mock<IMapper>();
 
-            var registered_user = new User("arkadiuszchr@gmail.com", "arkadiusz", "secretttt", "secretttt", "arkadiusz chr", "admin");
+            var registered_user = new User(Guid.NewGuid(), "arkadiuszchr@gmail.com", "arkadiusz", "secretttt", "secretttt", "arkadiusz chr", "admin");
             userRepository.Setup(x => x.GetAsync(registered_user.Id)).Returns(Task.FromResult(registered_user));
 
             var driver = new Driver(registered_user.Id, null, null, null);
@@ -65,7 +65,7 @@ namespace Passenger.Tests.Services
             var userRepository = new Mock<IUserRepository>();
             var mapperMock = new Mock<IMapper>();
 
-            var registered_user = new User("arkadiuszchr@gmail.com", "arkadiusz", "secretttt", "secretttt", "arkadiusz chr", "admin");
+            var registered_user = new User(Guid.NewGuid(), "arkadiuszchr@gmail.com", "arkadiusz", "secretttt", "secretttt", "arkadiusz chr", "admin");
             userRepository.Setup(x => x.GetAsync(registered_user.Id)).Returns(Task.FromResult(registered_user));
 
             var _driverService = new DriverService(driverRepository.Object, mapperMock.Object, userRepository.Object);

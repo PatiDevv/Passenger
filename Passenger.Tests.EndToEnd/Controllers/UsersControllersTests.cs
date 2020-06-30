@@ -1,12 +1,8 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
 using Passenger.Infrastructure.Commands.Users;
 using Passenger.Infrastructure.DTO;
 using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -19,7 +15,7 @@ namespace Passenger.Tests.EndToEnd.Controllers
         public async Task given_valid_email_user_should_exist()
         {
             //Act
-            var email = "user1@mail.com";
+            var email = "user1@test.com";
             var user = await GetUserAsync(email);
 
             //Assert

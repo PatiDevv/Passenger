@@ -10,27 +10,20 @@ namespace Passenger.Tests.EndToEnd.Controllers
 {
     public abstract class ControllerTestsBase
     {
-            protected readonly TestServer Server;
-
-            protected readonly HttpClient Client;
-
-            //arrange
-            protected ControllerTestsBase()
-            {
-                Server = new TestServer(new WebHostBuilder()
+        protected static readonly TestServer Server = new TestServer(new WebHostBuilder()
                             .ConfigureAppConfiguration(a => a.AddJsonFile("appsettings.Development.json"))
                             .ConfigureServices(x => x.AddAutofac())
                             .UseStartup<Startup>());
-                Client = Server.CreateClient();
 
-            }
+        protected static readonly HttpClient Client = Server.CreateClient();
 
-            protected static StringContent GetPayload(object data)
-            {
-            var json = JsonConvert.SerializeObject(data);
 
-            return new StringContent(json, Encoding.UTF8, "application/json");
-            }
+        protected static StringContent GetPayload(object data)
+        {
+        var json = JsonConvert.SerializeObject(data);
+
+        return new StringContent(json, Encoding.UTF8, "application/json");
+        }
 
     }
 }

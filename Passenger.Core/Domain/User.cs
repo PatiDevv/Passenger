@@ -32,9 +32,9 @@ namespace Passenger.Core.Domain
         {
         }
 
-        public User (string email, string username, string password, string salt, string fullname, string role)
+        public User (Guid userId, string email, string username, string password, string salt, string fullname, string role)
         {
-            Id = Guid.NewGuid();
+            Id = userId;
             Salt = salt;
             CreateAt = DateTime.UtcNow;
             SetPassword(password);

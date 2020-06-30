@@ -7,8 +7,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Passenger.Core.Repositories;
 using Passenger.Infrastructure.Extensions;
 using Passenger.Infrastructure.IoC;
+using Passenger.Infrastructure.Repositories;
+using Passenger.Infrastructure.Services;
 using Passenger.Infrastructure.Settings;
 using System.Text;
 
@@ -16,6 +19,7 @@ namespace Passenger
 {
     public class Startup
     {
+        private static readonly object SyncObject = new object();
         public IConfiguration Configuration { get; }
         public ILifetimeScope AutofacContainer { get; private set; }
 
@@ -89,6 +93,19 @@ namespace Passenger
             });
 
             AutofacContainer = app.ApplicationServices.GetAutofacRoot();
+            var generalSettings = app.ApplicationServices.GetService<GeneralSettings>();
+            var repo = app.ApplicationServices.GetService<IUserRepository>();
+
+            var users = repo.GetAllAsync().Result;
+
+            if(generalSettings.SeedData)
+            {
+                // end to end tests workaround
+             
+                    var dataInitializer = app.ApplicationServices.GetService<IDataInitializer>();
+                    dataInitializer.SeedAsync();
+                
+            }
         }
     }
 }

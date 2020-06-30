@@ -10,12 +10,8 @@ namespace Passenger.Infrastructure.Repositories
 {
     public class InMemoryUserRepository : IUserRepository
     {
-        private static ISet<User> _users = new HashSet<User>
-        {
-            new User("user1@mail.com", "user1", "se345345cret", "salt", "fullname", "admin"),
-            new User("user2@mail.com", "user1", "se345345cret", "salt", "fullname", "admin"),
-            new User("user3@mail.com", "user1", "sec345345ret", "salt", "fullname", "user"),
-        };
+        private static ISet<User> _users = new HashSet<User>();
+        
 
         public async Task<User> GetAsync(Guid Id)
              => await Task.FromResult(_users.Single(x => x.Id == Id));

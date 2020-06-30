@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Services
 {
-    public interface IDriverService
+    public interface IDriverService : IService
     {
         Task CreateAsync(Guid userId);
         Task<DriverDto> GetAsync(Guid userId);

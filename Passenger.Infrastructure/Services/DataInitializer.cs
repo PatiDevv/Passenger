@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Services
@@ -10,11 +9,14 @@ namespace Passenger.Infrastructure.Services
     {
         private readonly IUserService _userService;
         private readonly ILogger<DataInitializer> _logger;
+        private readonly IDriverService _driverService;
 
-        public DataInitializer(IUserService userService, ILogger<DataInitializer> logger)
+        public DataInitializer(IUserService userService, IDriverService driverService, ILogger<DataInitializer> logger)
         {
             _userService = userService;
+            _driverService = driverService;
             _logger = logger;
+            
         }
 
         public async Task SeedAsync()
@@ -26,9 +28,13 @@ namespace Passenger.Infrastructure.Services
             {
                 var userId = Guid.NewGuid();
                 var username = $"user{i}";
-                _logger.LogTrace($"Created a new user: '{username}'.");
-                
+
                 tasks.Add(_userService.RegisterAsync(userId, $"{username}@test.com", username, "secret", "kowalski", "user"));
+                _logger.LogTrace($"Created a new user: '{username}'.");
+               
+                tasks.Add(_driverService.CreateAsync(userId));
+                tasks.Add(_driverService.SetVehicleAsync(userId, "BMW", "i8", 5));
+                _logger.LogTrace($"Created a new driver for: '{username}'.");
             }
 
             for (var i = 1; i <= 3; i++)

@@ -26,7 +26,7 @@ namespace Passenger.Core.Domain
                 throw new Exception("You must have more extra seats in the car.");
             }
 
-            if (seats > 4)
+            if (seats > 5)
             {
                 throw new Exception("You can only use a passenger car to transport passengers.");
             }

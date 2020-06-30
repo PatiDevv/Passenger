@@ -16,7 +16,7 @@ namespace Passenger.Infrastructure.Handlers.Users
 
         public async Task HandleAsync(CreateUser command)
         {
-            await _userService.RegisterAsync(command.Email, command.UserName, command.Password, command.FullName);
+            await _userService.RegisterAsync(command.Email, command.UserName, command.Password, command.FullName, command.Role);
         }
     }
 }

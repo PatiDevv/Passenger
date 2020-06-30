@@ -2,7 +2,6 @@
 using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
 using Passenger.Infrastructure.DTO;
-using Passenger.Infrastructure.Repositories;
 using System;
 using System.Threading.Tasks;
 
@@ -46,7 +45,7 @@ namespace Passenger.Infrastructure.Services
             throw new Exception($"Invalid credentials.");
         }
 
-        public async Task RegisterAsync(string email, string username, string password, string fullname)
+        public async Task RegisterAsync(string email, string username, string password, string fullname, string role)
         {
             var user = await _userRepository.GetAsync(email);
             if (user != null)
@@ -57,7 +56,7 @@ namespace Passenger.Infrastructure.Services
             var salt = _encrypter.GetSalt(password);
             var hash = _encrypter.GetHash(password, salt);
 
-            user = new User(email, username, hash, salt, fullname);
+            user = new User(email, username, hash, salt, fullname, role);
 
             await _userRepository.AddAsync(user);
         }

@@ -19,8 +19,9 @@ namespace Passenger.Tests.Services
             var driverRepository = new Mock<IDriverRepository>();
             var userRepository = new Mock<IUserRepository>();
             var mapperMock = new Mock<IMapper>();
+            var vehicleProvider = new Mock<IVehicleProvider>();
 
-            var _driverService = new DriverService(driverRepository.Object, mapperMock.Object, userRepository.Object);
+            var _driverService = new DriverService(driverRepository.Object, mapperMock.Object, userRepository.Object, vehicleProvider.Object);
 
             var userId = Guid.NewGuid();
 
@@ -39,6 +40,7 @@ namespace Passenger.Tests.Services
             var driverRepository = new Mock<IDriverRepository>();
             var userRepository = new Mock<IUserRepository>();
             var mapperMock = new Mock<IMapper>();
+            var vehicleProvider = new Mock<IVehicleProvider>();
 
             var registered_user = new User(Guid.NewGuid(), "arkadiuszchr@gmail.com", "arkadiusz", "secretttt", "secretttt", "arkadiusz chr", "admin");
             userRepository.Setup(x => x.GetAsync(registered_user.Id)).Returns(Task.FromResult(registered_user));
@@ -47,7 +49,7 @@ namespace Passenger.Tests.Services
             driverRepository.Setup(x => x.GetAsync(registered_user.Id)).Returns(Task.FromResult(driver));
 
 
-            var _driverService = new DriverService(driverRepository.Object, mapperMock.Object, userRepository.Object);
+            var _driverService = new DriverService(driverRepository.Object, mapperMock.Object, userRepository.Object, vehicleProvider.Object);
 
             // Act
             var creatingDriverTask = _driverService.CreateAsync(registered_user.Id);
@@ -63,11 +65,12 @@ namespace Passenger.Tests.Services
             var driverRepository = new Mock<IDriverRepository>();
             var userRepository = new Mock<IUserRepository>();
             var mapperMock = new Mock<IMapper>();
+            var vehicleProvider = new Mock<IVehicleProvider>();
 
             var registered_user = new User(Guid.NewGuid(), "arkadiuszchr@gmail.com", "arkadiusz", "secretttt", "secretttt", "arkadiusz chr", "admin");
             userRepository.Setup(x => x.GetAsync(registered_user.Id)).Returns(Task.FromResult(registered_user));
 
-            var _driverService = new DriverService(driverRepository.Object, mapperMock.Object, userRepository.Object);
+            var _driverService = new DriverService(driverRepository.Object, mapperMock.Object, userRepository.Object, vehicleProvider.Object);
 
             // Act 
             var creatingDriverTask = _driverService.CreateAsync(registered_user.Id);

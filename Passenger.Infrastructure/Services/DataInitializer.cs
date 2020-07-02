@@ -10,13 +10,14 @@ namespace Passenger.Infrastructure.Services
         private readonly IUserService _userService;
         private readonly ILogger<DataInitializer> _logger;
         private readonly IDriverService _driverService;
+        private readonly IDriverRouteService _driverRouteService;
 
-        public DataInitializer(IUserService userService, IDriverService driverService, ILogger<DataInitializer> logger)
+        public DataInitializer(IUserService userService, IDriverService driverService, IDriverRouteService driverRouteService, ILogger<DataInitializer> logger)
         {
             _userService = userService;
             _driverService = driverService;
+            _driverRouteService = driverRouteService;
             _logger = logger;
-            
         }
 
         public async Task SeedAsync()
@@ -33,8 +34,12 @@ namespace Passenger.Infrastructure.Services
                 _logger.LogTrace($"Created a new user: '{username}'.");
                
                 tasks.Add(_driverService.CreateAsync(userId));
-                tasks.Add(_driverService.SetVehicleAsync(userId, "BMW", "i8", 5));
+                tasks.Add(_driverService.SetVehicleAsync(userId, "BMW", "i8"));
                 _logger.LogTrace($"Created a new driver for: '{username}'.");
+
+                tasks.Add(_driverRouteService.AddAsync(userId, "Default route", 1, 1, 2, 2));
+                tasks.Add(_driverRouteService.AddAsync(userId, "Job route", 3, 3, 4, 4));
+                _logger.LogTrace($"Adding route for: '{username}'");
             }
 
             for (var i = 1; i <= 3; i++)

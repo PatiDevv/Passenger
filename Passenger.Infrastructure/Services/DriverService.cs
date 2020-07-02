@@ -14,19 +14,21 @@ namespace Passenger.Infrastructure.Services
         private readonly IDriverRepository _driverRepository;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IVehicleProvider _vehicleProvider;
 
-        public DriverService(IDriverRepository driverRepository, IMapper mapper, IUserRepository userRepository)
+        public DriverService(IDriverRepository driverRepository, IMapper mapper, IUserRepository userRepository, IVehicleProvider vehicleProvider)
         {
             _driverRepository = driverRepository;
             _mapper = mapper;
             _userRepository = userRepository;
+            _vehicleProvider = vehicleProvider;
         }
 
-        public async Task<DriverDto> GetAsync(Guid userId)
+        public async Task<DriverDetailsDto> GetAsync(Guid userId)
         {
             var driver = await _driverRepository.GetAsync(userId);
 
-            return _mapper.Map<Driver, DriverDto>(driver);
+            return _mapper.Map<Driver, DriverDetailsDto>(driver);
         }
 
         public async Task<IEnumerable<DriverDto>> BrowseAsync()
@@ -55,14 +57,19 @@ namespace Passenger.Infrastructure.Services
             await _driverRepository.AddAsync(driver);
         }
 
-        public async Task SetVehicleAsync(Guid userId, string brand, string name, int seats)
+        public async Task SetVehicleAsync(Guid userId, string brand, string name)
         {
             var driver = await _driverRepository.GetAsync(userId);
             if (driver == null)
             {
                 throw new Exception($"Driver with user Id: '{userId}' was not found.");
             }
-            driver.SetVehicle(brand, name, seats);
+            var vehicleDetails = await _vehicleProvider.GetAsync(brand, name);
+
+            var vehicle = Vehicle.Create(brand, name, vehicleDetails.Seats);
+
+            driver.SetVehicle(vehicle);
+
             await _driverRepository.UpdateAsync(driver);
         }
     }

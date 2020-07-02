@@ -83,14 +83,13 @@ namespace Passenger.Core.Domain
             {
                 throw new Exception("You didn't enter a name.");
             }
-            
+
             //if (!NameRegex.IsMatch(username))
             //{
             //     throw new Exception("Username is invalid.");
             //}
-
+            UserName = username;
             UpdatedAt = DateTime.UtcNow;
-
         }
 
         private void SetFullName(string fullname)

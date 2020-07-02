@@ -9,13 +9,7 @@ namespace Passenger.Infrastructure.Repositories
 {
     public class InMemoryDriverRepository : IDriverRepository
     {
-        private static ISet<Driver> _drivers = new HashSet<Driver>
-        {
-            new Driver(Guid.NewGuid(), Vehicle.Create("Ford", "Focus", 5), new List<Route>{ new Route(),new Route()}, new List<DailyRoute>()),
-            new Driver(Guid.NewGuid(), Vehicle.Create("Ford", "Focus", 5), new List<Route>{ new Route(),new Route()}, new List<DailyRoute>()),
-            new Driver(Guid.NewGuid(), Vehicle.Create("Ford", "Focus", 5), new List<Route>{ new Route(),new Route()}, new List<DailyRoute>()),
-            new Driver(Guid.NewGuid(), Vehicle.Create("Ford", "Focus", 5), new List<Route>{ new Route(),new Route()}, new List<DailyRoute>())
-        };
+        private static ISet<Driver> _drivers = new HashSet<Driver>();
 
         public async Task<Driver> GetAsync(Guid userId)
             => await Task.FromResult (_drivers.SingleOrDefault(x => x.UserId == userId));

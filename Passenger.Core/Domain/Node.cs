@@ -5,7 +5,7 @@ namespace Passenger.Core.Domain
 {
     public class Node
     {
-        public string Adress { get; protected set; }
+        public string Address { get; protected set; }
         public double Longitude { get; protected set; }
         public double Latitude { get; protected set; }
 
@@ -18,32 +18,32 @@ namespace Passenger.Core.Domain
 
         }
 
-        protected Node(string adress, double longitude, double latitude)
+        protected Node(string address, double longitude, double latitude)
         {
-            SetAdress(adress);
+            SetAdress(address);
             SetLongitude(longitude);
             Setlatitude(latitude);
         }
 
-        private void SetAdress(string adress)
+        private void SetAdress(string address)
         {
-            if (string.IsNullOrWhiteSpace(adress))
+            if (string.IsNullOrWhiteSpace(address))
             {
                 throw new Exception("Address can not be empty");
             }
 
-            if (!AdressRegex.IsMatch(adress))
+            if (!AdressRegex.IsMatch(address))
             {
                 throw new Exception("The format of the address is not valid.");
             }
 
-            Adress = adress;
+            Address = address;
             Updateat = DateTime.UtcNow;
         }
 
         private void SetLongitude(double longitude)
         {
-            if (longitude < 180 && longitude > 0)
+            if (longitude > 180 && longitude < 0)
             {
                 throw new Exception("Enter values in the range 0-180.");
             }
@@ -58,7 +58,7 @@ namespace Passenger.Core.Domain
 
         private void Setlatitude(double latitude)
         {
-            if (latitude < 90 && latitude > 0)
+            if (latitude > 90 && latitude < 0)
             {
                 throw new Exception("Enter values in the range 0-90.");
             }
@@ -71,6 +71,9 @@ namespace Passenger.Core.Domain
             Updateat = DateTime.UtcNow;
         }
 
-
+        public static Node Create(string address, double startLongitude, double startLatitude)
+        {
+            return new Node(address, startLongitude, startLatitude);
+        }
     }
 }

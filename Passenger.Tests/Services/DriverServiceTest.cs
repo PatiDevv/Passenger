@@ -5,6 +5,7 @@ using Passenger.Core.Repositories;
 using Passenger.Infrastructure.Commands.Drivers;
 using Passenger.Infrastructure.Services;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -45,7 +46,7 @@ namespace Passenger.Tests.Services
             var registered_user = new User(Guid.NewGuid(), "arkadiuszchr@gmail.com", "arkadiusz", "secretttt", "secretttt", "arkadiusz chr", "admin");
             userRepository.Setup(x => x.GetAsync(registered_user.Id)).Returns(Task.FromResult(registered_user));
 
-            var driver = new Driver(registered_user.Id, null, null, null);
+            var driver = new Driver(registered_user.Id, null, new List<Route>(), new List<DailyRoute>());
             driverRepository.Setup(x => x.GetAsync(registered_user.Id)).Returns(Task.FromResult(driver));
 
 

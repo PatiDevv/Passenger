@@ -10,7 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Passenger.Core.Repositories;
 using Passenger.Infrastructure.Extensions;
 using Passenger.Infrastructure.IoC;
-using Passenger.Infrastructure.Repositories;
+using Passenger.Api.Framework;
 using Passenger.Infrastructure.Services;
 using Passenger.Infrastructure.Settings;
 using System.Text;
@@ -67,6 +67,7 @@ namespace Passenger
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new ContainerModule(Configuration));
+            
         }
 
 
@@ -80,7 +81,7 @@ namespace Passenger
             }
 
             app.UseHttpsRedirection();
-
+            app.UseMiddleware(typeof(ExceptionHandlerMiddleware));
             app.UseRouting();
 
             app.UseAuthentication();

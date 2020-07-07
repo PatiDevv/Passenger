@@ -51,7 +51,21 @@ namespace Passenger.Infrastructure.Services
                 tasks.Add(_userService.RegisterAsync(userId, $"{username}@test.com", username, "secret", "kowalski", "admin"));
             }
 
-            await Task.WhenAll(tasks);
+            var task = Task.WhenAll(tasks);
+
+            try
+            {
+                await task;
+            }
+            catch (Exception)
+            {
+                if (task.Exception != null)
+                {
+                    throw task.Exception;
+                }
+            }
+
+
             _logger.LogTrace("Data was initialized.");
         }
     }

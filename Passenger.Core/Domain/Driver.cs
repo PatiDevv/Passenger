@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 namespace Passenger.Core.Domain
 {
     public class Driver
@@ -48,14 +46,18 @@ namespace Passenger.Core.Domain
             UpdateAt = DateTime.UtcNow;
         }
 
-        public void AddRoute(string name, Node start, Node end)
+        public void AddRoute(string name, Node start, Node end, double distance)
         {
             var route = Routes.SingleOrDefault(x => x.Name == name);
             if(route != null)
             {
                 throw new Exception($"Route with '{name}' already exissts for driver: {Name}.");
             }
-            _routes.Add(Route.Create(name, start, end));
+            if (distance < 0)
+            {
+                throw new Exception($"Route with '{name}' can not have negative distance.");
+            }
+            _routes.Add(Route.Create(name, start, end, distance));
             UpdateAt = DateTime.UtcNow;
         }
 

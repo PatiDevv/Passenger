@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 
 namespace Passenger.Core.Domain
 {
@@ -10,8 +9,6 @@ namespace Passenger.Core.Domain
         public double Latitude { get; protected set; }
 
         public DateTime Updateat { get; protected set; }
-
-        private Regex AdressRegex = new Regex(@"^[A-Za-z0-9]+(?:\s[A-Za-z0-9'_-]+)+$");
 
         protected Node()
         {
@@ -30,11 +27,6 @@ namespace Passenger.Core.Domain
             if (string.IsNullOrWhiteSpace(address))
             {
                 throw new Exception("Address can not be empty");
-            }
-
-            if (!AdressRegex.IsMatch(address))
-            {
-                throw new Exception("The format of the address is not valid.");
             }
 
             Address = address;

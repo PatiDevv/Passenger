@@ -6,6 +6,7 @@ using AutoMapper;
 using Passenger.Core.Domain;
 using System.Collections.Generic;
 using Passenger.Infrastructure.Extensions;
+using Passenger.Infrastructure.Exceptions;
 
 namespace Passenger.Infrastructure.Services
 {
@@ -44,7 +45,7 @@ namespace Passenger.Infrastructure.Services
             var driver = await _driverRepository.GetAsync(userId);
             if (driver != null)
             {
-                throw new Exception($"Driver with Id: '{userId}' already exists.");
+                throw new ServiceException(Exceptions.ErrorCodes.DriverAlreadyExists, $"Driver with Id: '{userId}' already exists.");
             }
 
             driver = new Driver(user);

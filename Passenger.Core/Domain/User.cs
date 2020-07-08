@@ -48,12 +48,12 @@ namespace Passenger.Core.Domain
         {
             if (email==null || email == "" || email == " ")
             {
-                throw new Exception("Email can not be empty.");
+                throw new DomainException(ErrorCodes.InvalidEmail, "Email can not be empty.");
             }
 
             if (!EmailRegex.IsMatch(email))
             {
-                throw new Exception("The format of the email address is not valid.");
+                throw new DomainException(ErrorCodes.InvalidEmail, "The format of the email address is not valid.");
                
             }
 
@@ -66,12 +66,12 @@ namespace Passenger.Core.Domain
         {
             if (password == null || password == "" || password == " ")
             {
-                throw new Exception("Password can not be empty.");
+                throw new DomainException(ErrorCodes.InvalidPassword, "Password can not be empty.");
             }
 
             if (password.Length < 8)
             {
-                throw new Exception("Password can not contain less than 8 characters.");
+                throw new DomainException(ErrorCodes.InvalidPassword, "Password can not contain less than 8 characters.");
             }
 
             Password = password;
@@ -81,7 +81,7 @@ namespace Passenger.Core.Domain
         {
             if (username == null || username == "" || username == " ")
             {
-                throw new Exception("You didn't enter a name.");
+                throw new DomainException(ErrorCodes.InvalidUsername, "You didn't enter a name.");
             }
 
             //if (!NameRegex.IsMatch(username))

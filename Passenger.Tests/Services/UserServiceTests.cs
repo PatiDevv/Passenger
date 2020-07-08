@@ -3,6 +3,7 @@ using FluentAssertions;
 using Moq;
 using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
+using Passenger.Infrastructure.Exceptions;
 using Passenger.Infrastructure.Services;
 using Passenger.Tests.TestServices;
 using System;
@@ -43,7 +44,7 @@ namespace Passenger.Tests.Services
             var userService = new UserService(userRepositoryMock.Object, encrypterMock, mapperMock.Object);
 
             //Assert
-            await Assert.ThrowsAsync<Exception>(() => userService.RegisterAsync(Guid.NewGuid(), "arkadiuszchr@gmail.com", "arkadiusz", "secretttt", "arkadiusz chr", "admin"));
+            await Assert.ThrowsAsync<ServiceException>(() => userService.RegisterAsync(Guid.NewGuid(), "arkadiuszchr@gmail.com", "arkadiusz", "secretttt", "arkadiusz chr", "admin"));
 
         }
 

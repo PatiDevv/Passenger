@@ -48,7 +48,7 @@ namespace Passenger.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateDriver command)
         {
-            await DispatchAsync(command);
+            await DispatchAsync<CreateDriver>(command);
 
             return NoContent();
         }

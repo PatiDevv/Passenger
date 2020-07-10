@@ -15,6 +15,7 @@ using Passenger.Infrastructure.Services;
 using Passenger.Infrastructure.Settings;
 using System.Text;
 using Passenger.Infrastructure.Mongo;
+using Passenger.Infrastructure.EF;
 
 namespace Passenger
 {
@@ -36,6 +37,10 @@ namespace Passenger
             {
                 options.JsonSerializerOptions.WriteIndented = true;
             });
+
+            services.AddEntityFrameworkSqlServer()
+                    .AddEntityFrameworkInMemoryDatabase()
+                    .AddDbContext<PassengerContext>();
 
             // Pobranie appsetingsow (appsetings.json)
             var jwtSettings = Configuration.GetSettings<JwtSettings>();

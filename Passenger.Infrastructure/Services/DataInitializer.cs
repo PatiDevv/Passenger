@@ -55,11 +55,8 @@ namespace Passenger.Infrastructure.Services
                 var username = $"admin{i}";
                 _logger.LogTrace($"Created a new admin: '{username}'.");
 
-                tasks.Add(_userService.RegisterAsync(userId, $"{username}@test.com", username, "secret", "kowalski", "admin"));
+                await _userService.RegisterAsync(userId, $"{username}@test.com", username, "secret", "kowalski", "admin");
             }
-
-            await Task.WhenAll(tasks);
-
             _logger.LogTrace("Data was initialized.");
         }
     }

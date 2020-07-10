@@ -14,6 +14,7 @@ using Passenger.Api.Framework;
 using Passenger.Infrastructure.Services;
 using Passenger.Infrastructure.Settings;
 using System.Text;
+using Passenger.Infrastructure.Mongo;
 
 namespace Passenger
 {
@@ -92,11 +93,10 @@ namespace Passenger
                 endpoints.MapControllers();
             });
 
+            MongoConfigurator.Initializer();
             AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             var generalSettings = app.ApplicationServices.GetService<GeneralSettings>();
             var repo = app.ApplicationServices.GetService<IUserRepository>();
-
-            var users = repo.GetAllAsync().Result;
 
             if(generalSettings.SeedData)
             {
